@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.company.xpertech.xpertech.Nav_Fragment.Troubleshoot_Fragment.TroubleshootConfirmationFragment"
+    android:orientation="horizontal">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/content_padding"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Did it fix the issue?"
+            android:id="@+id/top_txt"
+            android:textSize="30sp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+        <Button
+            android:id="@+id/btn_fixed"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/content_padding"
+            android:paddingEnd="@dimen/content_padding"
+            android:layout_marginTop="@dimen/content_padding"
+            android:layout_gravity="center"
+            android:text="Yes, it did."/>
+
+        <Button
+            android:id="@+id/btn_notfixed"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Unfortunately, it did not."/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

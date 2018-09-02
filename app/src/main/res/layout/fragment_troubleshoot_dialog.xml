@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.company.xpertech.xpertech.Nav_Fragment.Troubleshoot_Fragment.TroubleshootConfirmationFragment"
+    android:orientation="horizontal">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/content_padding"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/dialog_text"
+            android:textSize="24sp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/content_padding"
+            android:paddingEnd="@dimen/content_padding"
+            android:layout_marginTop="@dimen/content_padding"
+            android:layout_gravity="center"
+            android:text="Back to troubleshooting menu"/>
+
+        <Button
+            android:id="@+id/btn_call"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Call service provider"/>
+    </LinearLayout>
+
+
+</RelativeLayout>
