@@ -34,14 +34,6 @@ import java.util.ArrayList;
 import static com.company.xpertech.xpertech.R.id;
 import static com.company.xpertech.xpertech.R.layout;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Sub_Install_Fragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Sub_Install_Fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Sub_Install_Fragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,15 +57,6 @@ public class Sub_Install_Fragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Sub_Install_Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static Sub_Install_Fragment newInstance(String param1, String param2) {
         Sub_Install_Fragment fragment = new Sub_Install_Fragment();
         Bundle args = new Bundle();
@@ -112,11 +95,13 @@ public class Sub_Install_Fragment extends Fragment {
         listView = (ListView) view.findViewById(id.sub_install_list);
         textView = (TextView) view.findViewById(id.sub_install_name);
 
+        /**
+         *  Initiate async task SubInstallTask to query for detail info of the selected data from SelfIntallFragment
+         */
         Sub_Install_Fragment.SubInstallTask sit = new Sub_Install_Fragment.SubInstallTask(getContext());
         sit.execute("selfinstall_steps", position+"", BOX_NUMBER_SESSION);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -146,7 +131,9 @@ public class Sub_Install_Fragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-
+    /**
+     * Query for Detailed information based on the selected item in SubIntallFragment
+     */
     public class SubInstallTask extends AsyncTask<String,Void,String> {
         Context ctx;
         AlertDialog alertDialog;

@@ -38,11 +38,6 @@ import java.util.List;
  */
 public class ChannelFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private List<String> crystal_channelTitle;
-    private List<String> diamond_channelTitle;
-    private List<Channels> crystal_channel_list;
-    private List<Channels> diamond_channel_list;
 
     ArrayList<Channels> channelsList;
 
@@ -96,9 +91,13 @@ public class ChannelFragment extends Fragment {
         return view;
     }
 
+    /**
+     *  Set's the data to the recycler view to display.
+     *  data are the list of channel after query
+     *  this method was called on the post execute function othe async task for query.
+     */
     void display(){
         if (view instanceof RecyclerView) {
-            Context context = view.getContext();
             recyclerView = (RecyclerView) view;
             recyclerView.setAdapter(new ChannelRecyclerView(channelsList, mListener));
         }
@@ -143,6 +142,10 @@ public class ChannelFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     *  Task to query for the list of channel in regards to the package selected to be displayed.
+     *  Task to query for the list of channel in regards to the package selected to be displayed.
+     */
     public class ChannelTask extends AsyncTask<String,Void,String> {
         Context ctx;
         AlertDialog alertDialog;

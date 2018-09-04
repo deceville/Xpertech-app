@@ -41,7 +41,6 @@ import com.company.xpertech.xpertech.Nav_Fragment.Self_Install_Fragment.Sub_Inst
 import com.company.xpertech.xpertech.Nav_Fragment.StatisticsFragment.Statistics_Fragment;
 import com.company.xpertech.xpertech.Nav_Fragment.Troubleshoot_Fragment.IntroFragment;
 import com.company.xpertech.xpertech.Nav_Fragment.Troubleshoot_Fragment.TroubleeshootItemFragment;
-import com.company.xpertech.xpertech.Nav_Fragment.Troubleshoot_Fragment.TroubleshootConfirmationFragment;
 import com.company.xpertech.xpertech.Nav_Fragment.Troubleshoot_Fragment.TroubleshootFragment;
 import com.company.xpertech.xpertech.R;
 
@@ -59,12 +58,14 @@ import java.net.URLEncoder;
 
 import static android.Manifest.permission.CALL_PHONE;
 
+/**
+ *  "implements" the fragments under nav_fragment package
+ */
 public class MainActivity extends AppCompatActivity
         implements TroubleshootFragment.OnListFragmentInteractionListener,
         TroubleeshootItemFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
         IntroFragment.OnFragmentInteractionListener,
-        TroubleshootConfirmationFragment.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener,
         PackagesFragment.OnListFragmentInteractionListener,
         ChannelFragment.OnFragmentInteractionListener,
@@ -78,12 +79,8 @@ public class MainActivity extends AppCompatActivity
         AboutNBCFragment.OnFragmentInteractionListener,
         Statistics_Fragment.OnFragmentInteractionListener{
 
-    Bundle bundle;
-    Bundle SESSION_BUNDLE;
-    String BOX_NUMBER_SESSION;
     TextView username;
     TextView contact;
-    DrawerLayout drawer;
     SharedPreferences s;
     String USER_SESSION = "";
 
@@ -94,6 +91,9 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /**
+         *  Onclick functionality for floating button that launches feedback form
+         */
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,32 +103,46 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        /**
+         *  Setting the action for the hamburger menu
+         */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        /**
+         *  Async task for extracting user information that is displayed on the hambuger menu
+         */
         MainActivity.BackgroundTask backgroundTask = new MainActivity.BackgroundTask(getApplicationContext());
         backgroundTask.execute("get");
 
+        /**
+         *  Setting the layout for the hamburger menu
+         */
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        /**
+         *  Shared preferences ask as the session for the whole application
+         *  USER_SESSION contains the user_id + device_id
+         */
         s = getSharedPreferences("values", Context.MODE_PRIVATE);
         USER_SESSION = s.getString("USER_SESSION", "USER_SESSION");
 
         Toast.makeText(getApplicationContext(), "You have successfully logged in.", Toast.LENGTH_SHORT);
-        //Statistics
+
+        /**
+         *  Task method that stores the statistics information, in this call, user logged in successfully
+         */
         Task task = new Task();
         task.execute("stat", "login", "pass", USER_SESSION);
 
-        // Pass box number session
-        BOX_NUMBER_SESSION = getIntent().getStringExtra("BOX_NUMBER_SESSION");
-        SESSION_BUNDLE = new Bundle();
-        SESSION_BUNDLE.putString("BOX_NUMBER_SESSION", BOX_NUMBER_SESSION);
+        /**
+         *  Setting the layout for the Home
+         */
         HomeFragment hf = new HomeFragment();
-        hf.setArguments(SESSION_BUNDLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.content_main, hf).commit();
     }
 
@@ -155,9 +169,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -166,7 +177,9 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
+        /**
+         * Set the click action for the menu in Hamburger Menu
+         */
         switch(item.getItemId()){
             case R.id.nav_troubleshoot:
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new TroubleshootFragment()).addToBackStack("tag").commit();
@@ -184,15 +197,26 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new RemoteListFragment()).addToBackStack("tag").commit();
                 break;
             case R.id.nav_send:
+                /**
+                 *  Intent for a call action and setting the number to which the call will be directed
+                 */
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse("tel:4458514"));
 
+                /**
+                 *  If statements check if the permission of the application to phone to make a phone call using the app is granted
+                 */
                 if (ContextCompat.checkSelfPermission(this.getApplicationContext(), CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                    SharedPreferences s = this.getSharedPreferences("values", Context.MODE_PRIVATE);
+                    /**
+                     * Task method that stores the statistics information, in this case, user made a phone call
+                     */
                     Task task = new Task();
                     task.execute("stat","call", "pass", USER_SESSION);
                     startActivity(callIntent);
                 } else {
+                    /**
+                     *  when if condition is false, the application will request permission to make a phone call
+                     */
                     requestPermissions(new String[]{CALL_PHONE}, 1);
                 }
                 break;
@@ -243,11 +267,12 @@ public class MainActivity extends AppCompatActivity
     String global_name = "";
     String global_contact = "";
 
+    /**
+     *  Async task function to extract user information from the database host
+     */
     public class BackgroundTask extends AsyncTask<String, Void, String> {
         AlertDialog alertDialog;
         Context ctx;
-        public String boxNumber = null;
-
         public BackgroundTask(Context ctx) {
             this.ctx = ctx;
         }
@@ -258,6 +283,11 @@ public class MainActivity extends AppCompatActivity
             alertDialog.setTitle("Login Information....");
         }
 
+        /**
+         * Uses HttpURLConnection to connect the URL that contains the query for subscriber information
+         * Uses BufferedWriter to encode the data required for the query of user information, in this case, ownership_id
+         * Uses BufferedReader to decode the resulting data of the query
+         */
         @Override
         protected String doInBackground(String... params) {
             String login_url = "https://uslsxpertech.000webhostapp.com/xpertech/subscriber_name.php";
@@ -303,6 +333,9 @@ public class MainActivity extends AppCompatActivity
             super.onProgressUpdate(values);
         }
 
+        /**
+         * Set's the data after query to the user information in the hamburger menu
+         */
         @Override
         protected void onPostExecute(String result) {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

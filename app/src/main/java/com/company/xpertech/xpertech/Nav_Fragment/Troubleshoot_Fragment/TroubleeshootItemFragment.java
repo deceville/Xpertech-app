@@ -40,21 +40,11 @@ import pl.droidsonroids.gif.GifImageView;
 
 import static android.Manifest.permission.CALL_PHONE;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TroubleeshootItemFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link TroubleeshootItemFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class TroubleeshootItemFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private static String data = null;
@@ -76,15 +66,6 @@ public class TroubleeshootItemFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TroubleeshootItemFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static TroubleeshootItemFragment newInstance(String param1, String param2) {
         TroubleeshootItemFragment fragment = new TroubleeshootItemFragment();
         Bundle args = new Bundle();
@@ -102,21 +83,33 @@ public class TroubleeshootItemFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        /**
+         * Get the position of the pressed value from TroubleshootFragment
+         */
         Bundle bundle = getArguments();
         position = bundle.getInt("position")+1;
 
+        /**
+         * Get the box id and user id from the session
+         */
         SharedPreferences s = this.getActivity().getSharedPreferences("values", Context.MODE_PRIVATE);
         BOX_NUMBER_SESSION = s.getString("BOX_NUMBER_SESSION", "BOX_NUMBER_SESSION");
         BOX_NUMBER_SESSION = BOX_NUMBER_SESSION.replaceAll("\\s+","");
         USER_SESSION = s.getString("USER_SESSION", "USER_SESSION");
 
         troubleshootArrayList= new ArrayList<Troubleshoot>();
-        SubMenuTask subMenuTask = new SubMenuTask(getContext());
         trb_id = position+"";
+
+        /**
+         * Initiate SubMenuTask async task to query for the troubleshooting steps
+         */
+        SubMenuTask subMenuTask = new SubMenuTask(getContext());
         subMenuTask.execute("stat","troubleshoot_steps", position+"",BOX_NUMBER_SESSION);
-        Log.d("SIZE",  troubleshootArrayList.size()+"");
     }
 
+    /**
+     * Handle the displaying of the troubshooting step one by one depending on the index number
+     */
     public void next(final int index){
         TextView txt = (TextView) this.view.findViewById(R.id.item_text);
         Troubleshoot troubleshoot = troubleshootArrayList.get(index);
@@ -137,8 +130,11 @@ public class TroubleeshootItemFragment extends Fragment {
         gif = (GifImageView) view.findViewById(R.id.gif_imageView);
 
 
+        /**
+         * Handles the done button on every step
+         * once clicked, a dialog box will be displayed for confirmation
+         */
         Button btn_done = (Button) view.findViewById(R.id.btn_done);
-
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,6 +146,12 @@ public class TroubleeshootItemFragment extends Fragment {
                 if (cnt == troubleshootArrayList.size()-1)
                     dialog_text.setText("Was the problem fixed?");
 
+                /**
+                 * Function for the YES button on the dialog box
+                 * Handles the displaying of the next troubleshooting step
+                 * If the last instruction is displayed, the yes nutton will redirect back to the
+                 * list of troubleshooting problems
+                 */
                 final Button btn_back = (Button) d.findViewById(R.id.btn_back);
                 btn_back.setText("Yes");
                 btn_back.setOnClickListener(new View.OnClickListener() {
@@ -157,11 +159,20 @@ public class TroubleeshootItemFragment extends Fragment {
                     public void onClick(View v) {
                         d.dismiss();
                         cnt++;
+                        /**
+                         * if it is not yet the last troubleshooting step, if statement will be initiated for YES button
+                         * but if it is the last troubleshooting step, else statement will be initiated for YES button
+                         */
                         if(cnt < troubleshootArrayList.size()){
                             next(cnt);
                         } else {
                             troubleshootArrayList = new ArrayList<Troubleshoot>();
                             TroubleshootFragment tf = new TroubleshootFragment();
+
+                            /**
+                             * Initiate the statistics for troubleshoot that pass
+                             * and returns to the list of troubleshooting problem
+                             */
                             Task task = new Task();
                             task.execute("stat", "troubleshoot", "pass", USER_SESSION);
                             actvty.getSupportFragmentManager().beginTransaction().replace(R.id.content_main, tf).commit();
@@ -169,16 +180,30 @@ public class TroubleeshootItemFragment extends Fragment {
                     }
                 });
 
+                /**
+                 * Function for the NO button on the dialog box
+                 * Displays a dialog box to prompt the user to make a call to the customer service
+                 */
                 final Button btn_call = (Button) d.findViewById(R.id.btn_call);
                 btn_call.setText("No");
                 btn_call.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         d.dismiss();
+                        /**
+                         * Once the user pressed NO when asked if the process was performed or the problem was fixed,
+                         * Task for statistics will be initiated to save the record of a failed process
+                         * and a dialog to call customer service will be displayed
+                         */
                         Task task = new Task();
                         task.execute("stat", "troubleshoot", "fail", USER_SESSION);
                         dialog_text.setText("Would you like to call customer service now?");
                         d.show();
+
+                        /**
+                         * If YES button to call customer service is pressed, call will be made
+                         * and again the Task for statistics will be triggered to save that a call was made
+                         */
                         btn_back.setOnClickListener(new View.OnClickListener(){
 
                             @Override
@@ -199,16 +224,17 @@ public class TroubleeshootItemFragment extends Fragment {
                                 actvty.getSupportFragmentManager().beginTransaction().replace(R.id.content_main, tf).commit();
                             }
                         });
-                        btn_call.setOnClickListener(new View.OnClickListener(){
 
+                        /**
+                         * If NO button to call customer service is pressed, no call will be make
+                         * but Task for statistics will be triggered to save that the suggestion to make a phone call was declined.
+                         */
+                        btn_call.setOnClickListener(new View.OnClickListener(){
                             @Override
                             public void onClick(View v) {
                                 d.dismiss();
                                 Task task = new Task();
                                 task.execute("stat","call", "fail", USER_SESSION);
-                               // troubleshootArrayList = new ArrayList<Troubleshoot>();
-                               // TroubleshootFragment tf = new TroubleshootFragment();
-                               // actvty.getSupportFragmentManager().beginTransaction().replace(R.id.content_main, tf).commit();
                             }
                         });
                     }
@@ -265,6 +291,9 @@ public class TroubleeshootItemFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     *  Function to Query for the troubleshooting steps
+     */
     public class SubMenuTask extends AsyncTask<String,Void,String> {
         Context ctx;
         AlertDialog alertDialog;
@@ -339,10 +368,7 @@ public class TroubleeshootItemFragment extends Fragment {
                     else
                         img_list = new String[0];
                     for (int i = 0; i < step_list.length; i++) {
-//                        if(img_list.length == step_list.length)
-                            TroubleeshootItemFragment.troubleshootArrayList.add(new Troubleshoot(step_list[i], img_list[i]));
-//                        else
-//                            TroubleeshootItemFragment.troubleshootArrayList.add(new Troubleshoot(step_list[i], "0"));
+                        TroubleeshootItemFragment.troubleshootArrayList.add(new Troubleshoot(step_list[i], img_list[i]));
                     }
 
                     bufferedReader.close();

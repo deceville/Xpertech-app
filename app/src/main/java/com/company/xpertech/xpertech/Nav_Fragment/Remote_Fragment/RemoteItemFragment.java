@@ -31,17 +31,7 @@ import java.net.URLEncoder;
 
 import pl.droidsonroids.gif.GifImageView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RemoteItemFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RemoteItemFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RemoteItemFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -52,7 +42,6 @@ public class RemoteItemFragment extends Fragment {
     private ListView listView;
     Context ctx;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -62,15 +51,6 @@ public class RemoteItemFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RemoteItemFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static RemoteItemFragment newInstance(String param1, String param2) {
         RemoteItemFragment fragment = new RemoteItemFragment();
         Bundle args = new Bundle();
@@ -93,14 +73,23 @@ public class RemoteItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_remote_item, container, false);
+
+        /**
+         * Initiating the Async task to query for the remote details
+         */
         RemoteItemFragment.RemoteDetailTask remoteDetailTask = new RemoteItemFragment.RemoteDetailTask(getContext());
         remoteDetailTask.execute("remote_detail");
         return view;
     }
 
+    /**
+     *  Set's the data to the interface
+     *  This function is called in the post execute of the Remote Desc async task
+     *  Display's the image and detail of the selected remote information
+     */
     void setDetail(){
         TextView textView = (TextView) view.findViewById(R.id.remote_detail);
-       GifImageView imageView = (GifImageView) view.findViewById(R.id.remote_img);
+        GifImageView imageView = (GifImageView) view.findViewById(R.id.remote_img);
         int imgInt;
         textView.setText(desc);
 
@@ -110,6 +99,11 @@ public class RemoteItemFragment extends Fragment {
 
     }
 
+    /**
+     * Displays the list of the remote buttons
+     * This method is called in Remote Detail async task's post execute
+     * Uses array adapter to display data in the list view of the interface
+     */
     void display(){
         listView = (ListView) view.findViewById(R.id.remote_detail_list);
 
@@ -159,6 +153,9 @@ public class RemoteItemFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Query for the list of buttons of the remote
+     */
     public class RemoteDetailTask extends AsyncTask<String,Void,String> {
         Context ctx;
         AlertDialog alertDialog;
@@ -215,6 +212,11 @@ public class RemoteItemFragment extends Fragment {
         }
     }
 
+    /**
+     *  Query for the information of the selected button
+     *  Image to be displayed of the button
+     *  Description of the button to be displayed
+     */
     public class RemoteDescTask extends AsyncTask<String,Void,String> {
         Context ctx;
         AlertDialog alertDialog;

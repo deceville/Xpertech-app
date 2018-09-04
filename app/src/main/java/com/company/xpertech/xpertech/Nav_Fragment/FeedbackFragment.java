@@ -13,39 +13,20 @@ import android.widget.EditText;
 
 import com.company.xpertech.xpertech.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FeedbackFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FeedbackFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class FeedbackFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
     public FeedbackFragment() {
-        // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FeedbackFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static FeedbackFragment newInstance(String param1, String param2) {
         FeedbackFragment fragment = new FeedbackFragment();
         Bundle args = new Bundle();
@@ -71,6 +52,10 @@ public class FeedbackFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_feedback, container, false);
         getActivity().setTitle("Feedback");
 
+        /**
+         * Handles the process for the feedback title and message
+         * the button send will then trigger the sendMail() function
+         */
         final EditText email_subject = (EditText) view.findViewById(R.id.email_subject);
         final EditText email_msg = (EditText) view.findViewById(R.id.email_msg);
         Button btn_email = (Button) view.findViewById(R.id.btn_email);
@@ -84,20 +69,27 @@ public class FeedbackFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Initiate the sending of email to xpertech@gmail.com
+     * "message/rfc822" is the multipurpose internet mail extension
+     * it extends the format of email to support text format
+     */
     public void sendMail(String title, String message){
         Intent intent = null, chooser = null;
-            intent = new Intent(Intent.ACTION_SEND);
-            intent.setData(Uri.parse("mailto:"));
-            String[] to = {"xpertech@gmail.com"};
-            intent.putExtra(Intent.EXTRA_EMAIL, to);
-            intent.putExtra(Intent.EXTRA_SUBJECT, title);
-            intent.putExtra(Intent.EXTRA_TEXT, message);
-            intent.setType("message/rfc822");
-            chooser = Intent.createChooser(intent, "Send Email");
+        intent = new Intent(Intent.ACTION_SEND);
+        intent.setData(Uri.parse("mailto:"));
+        String[] to = {"xpertech@gmail.com"};
+        intent.putExtra(Intent.EXTRA_EMAIL, to);
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        intent.putExtra(Intent.EXTRA_TEXT, message);
+        intent.setType("message/rfc822");
+        /**
+         * Initiate the pop up for the user to choose the email app for feedback
+         */
+        chooser = Intent.createChooser(intent, "Send Email");
             startActivity(chooser);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -121,16 +113,6 @@ public class FeedbackFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

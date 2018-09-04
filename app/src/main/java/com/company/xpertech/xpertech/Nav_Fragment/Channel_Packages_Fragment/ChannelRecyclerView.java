@@ -14,7 +14,11 @@ import com.company.xpertech.xpertech.R;
 import java.util.List;
 
 /**
- * Created by Skylar Gail on 8/15/2018.
+ * Process the data to be displayed on the list.
+ * This method was called in Channel Fragment
+ *
+ * Refer on the link for more information about recycler view:
+ * https://developer.android.com/guide/topics/ui/layout/recyclerview
  */
 
 public class ChannelRecyclerView extends RecyclerView.Adapter<ChannelRecyclerView.ViewHolder> implements ChannelFragment.OnFragmentInteractionListener {
@@ -39,7 +43,6 @@ public class ChannelRecyclerView extends RecyclerView.Adapter<ChannelRecyclerVie
     @Override
     public void onBindViewHolder(ChannelRecyclerView.ViewHolder holder, int position) {
         holder.mTitleView.setText(mChannels.get(position).getTitle());
-        //holder.mChannelNumberView.setText(mChannels.get(position).getChannelNumber());
     }
 
     @Override

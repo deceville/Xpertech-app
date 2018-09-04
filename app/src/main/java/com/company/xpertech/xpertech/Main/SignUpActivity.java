@@ -64,8 +64,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_scan_qr);
 
+        // Start the session
         sharedPref = getSharedPreferences("values", Context.MODE_PRIVATE);
-
         qr_result = (TextView) findViewById(R.id.qr_result);
 
         cameraPreview = (SurfaceView) findViewById(R.id.cameraPreview);
@@ -79,7 +79,6 @@ public class SignUpActivity extends AppCompatActivity {
                 .build();
 
         //Add Event
-
         cameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -113,20 +112,21 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
 
-
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> qrcodes = detections.getDetectedItems();
                 String result = "0";
 
+                /**
+                 * If a qr code is detected, it initiate the query to check for the device information
+                 * of the detected qr code and if it exist in the system
+                 */
                 if (qrcodes.size() != 0) {
                     result = qrcodes.valueAt(0).displayValue;
                     USER_SESSION = result;
                     BackgroundTask backgroundTask = new BackgroundTask(getApplicationContext());
                     backgroundTask.execute("login", result);
-//                    cameraSource.stop();
                 }
-
                 Log.d("QR", result);
             }
         });
@@ -211,27 +211,28 @@ public class SignUpActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            //Log.d("BOX", BOX_NUMBER_SESSION);
             BOX_NUMBER_SESSION = BOX_NUMBER_SESSION.replaceAll("\\s+", "");
             if (BOX_NUMBER_SESSION.equals("1001") ||
                     BOX_NUMBER_SESSION.equals("1002") ||
                     BOX_NUMBER_SESSION.equals("1003")) {
                 cameraSource.stop();
-                //Session
+
+                //Storing the box number and user id to the session
                 editor = sharedPref.edit();
                 editor.putString("BOX_NUMBER_SESSION", BOX_NUMBER_SESSION);
                 editor.putString("USER_SESSION", USER_SESSION);
                 editor.commit();
 
+                //if the main activity will start, the sign up activity will instantly be stop
                 intent = new Intent(getBaseContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.putExtra("keep", false);
-
-                Toast.makeText(getApplicationContext(), "You have successfully logged in.", Toast.LENGTH_SHORT).show();
                 startActivity(intent);
                 finish();
             } else {
+                // if the scanned qr code does not exist in the system, Task for statistics will be initiated and store the information that
+                // an un successful log in was performed
                 Toast.makeText(getApplicationContext(), "Sorry, device " + BOX_NUMBER_SESSION + " is not registered.", Toast.LENGTH_SHORT).show();
                 Task task = new Task();
                 task.execute("stat", "login", "fail", "0");

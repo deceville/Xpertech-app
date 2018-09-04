@@ -35,11 +35,7 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class PackagesFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
@@ -77,10 +73,8 @@ public class PackagesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences s = this.getActivity().getSharedPreferences("values", Context.MODE_PRIVATE);
-        //s = PreferenceManager.getDefaultSharedPreferences(this.getContext());
         BOX_NUMBER_SESSION = s.getString("BOX_NUMBER_SESSION", "BOX_NUMBER_SESSION");
         BUNDLE_SESSION = getArguments();
-        //BOX_NUMBER_SESSION = BUNDLE_SESSION.getString("BOX_NUMBER_SESSION");
 
 
         Log.d("BOX_NUMBER_SESSION",BOX_NUMBER_SESSION);
@@ -139,6 +133,7 @@ public class PackagesFragment extends Fragment {
         void onListFragmentInteraction(Packages item);
     }
 
+    //  Async Task to Query for the list of packages available
     public class MenuTask extends AsyncTask<String,Void,String> {
         Context ctx;
         AlertDialog alertDialog;

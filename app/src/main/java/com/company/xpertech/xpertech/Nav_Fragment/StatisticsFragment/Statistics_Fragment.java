@@ -31,17 +31,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Statistics_Fragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Statistics_Fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Statistics_Fragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -65,15 +56,6 @@ public class Statistics_Fragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Statistics_Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static Statistics_Fragment newInstance(String param1, String param2) {
         Statistics_Fragment fragment = new Statistics_Fragment();
         Bundle args = new Bundle();
@@ -96,6 +78,11 @@ public class Statistics_Fragment extends Fragment {
 
     }
 
+    /**
+     *  Handles the process of displaying chart for Call Records
+     *  PieChart is a library integrated to the system to display a chart
+     *  called in BackgroundTask's post execute function
+     */
     void call(){
         PieChart mChart;
         String[] xValues = {"Called", "Declined"};
@@ -117,6 +104,11 @@ public class Statistics_Fragment extends Fragment {
         mChart.invalidate();
     }
 
+    /**
+     *  Handles the process of displaying chart for Login Records
+     *  PieChart is a library integrated to the system to display a chart
+     *  called in BackgroundTask's post execute function
+     */
     void login(){
         PieChart mChart;
         String[] xValues = {"Successfully", "Failed"};
@@ -138,6 +130,11 @@ public class Statistics_Fragment extends Fragment {
         mChart.invalidate();
     }
 
+    /**
+     *  Handles the process of displaying chart for Troubleshooting Records
+     *  PieChart is a library integrated to the system to display a chart
+     *  called in BackgroundTask's post execute function
+     */
     void trouble(){
         PieChart mChart;
         String[] xValues = {"Fixed", "Failed"};
@@ -164,16 +161,16 @@ public class Statistics_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_statistics_, container, false);
 
+        /**
+         * Initiate the Background task async task to query for the statistical records of
+         * call, login, and troubleshooting
+         */
         BackgroundTask loginPass = new BackgroundTask(getContext());
         loginPass.execute("cnt");
-//        loginPCnt =340;
-//        loginFCnt = 120;
-//        login();
 
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -197,21 +194,14 @@ public class Statistics_Fragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     *  Async task to query for the statistical records
+     */
     public class BackgroundTask extends AsyncTask<String, Void, String> {
         AlertDialog alertDialog;
         Context ctx;

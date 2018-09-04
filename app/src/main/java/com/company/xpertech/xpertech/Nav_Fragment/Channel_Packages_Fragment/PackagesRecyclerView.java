@@ -17,7 +17,11 @@ import com.company.xpertech.xpertech.R;
 import java.util.List;
 
 /**
- * Created by Skylar Gail on 8/12/2018.
+ * Process the data to be displayed on the list.
+ * This method was calle din Packages Fragment
+ *
+ * Refer on the link for more information about recycler view:
+ * https://developer.android.com/guide/topics/ui/layout/recyclerview
  */
 
 public class PackagesRecyclerView extends RecyclerView.Adapter<PackagesRecyclerView.ViewHolder> implements ChannelFragment.OnFragmentInteractionListener{

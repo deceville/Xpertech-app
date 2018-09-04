@@ -14,6 +14,7 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         int secondsDelayed = 1;
+        //Time delay to display the splash screen
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 startActivity(new Intent(WelcomeActivity.this, SignUpActivity.class));

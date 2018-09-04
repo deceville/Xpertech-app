@@ -9,10 +9,4 @@
        android:layout_height="match_parent"
        android:id="@+id/pdfView">
    </com.github.barteksc.pdfviewer.PDFView>
-
-   <!--<TextView-->
-       <!--android:layout_width="match_parent"-->
-       <!--android:layout_height="match_parent"-->
-       <!--android:id="@+id/manual"/>-->
-
-</FrameLayout>
+   </FrameLayout>

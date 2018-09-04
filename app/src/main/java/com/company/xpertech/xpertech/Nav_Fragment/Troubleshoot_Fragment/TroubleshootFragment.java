@@ -33,17 +33,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
 public class TroubleshootFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     MyTroubleshootRecyclerViewAdapter mAdapter;
@@ -53,19 +45,12 @@ public class TroubleshootFragment extends Fragment {
 
     View view = null;
     static String BOX_NUMBER_SESSION;
-    static Bundle BUNDLE_SESSION;
 
     RecyclerView recyclerView;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public TroubleshootFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static TroubleshootFragment newInstance(int columnCount) {
         TroubleshootFragment fragment = new TroubleshootFragment();
         Bundle args = new Bundle();
@@ -78,12 +63,16 @@ public class TroubleshootFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /**
+         *  Access session record to get box id
+         */
         SharedPreferences s = this.getActivity().getSharedPreferences("values", Context.MODE_PRIVATE);
         BOX_NUMBER_SESSION = s.getString("BOX_NUMBER_SESSION", "BOX_NUMBER_SESSION");
 
         String method = "troubleshoot";
-
-        Log.d("BOX_NUMBER_SESSION",BOX_NUMBER_SESSION);
+        /**
+         * Initiate MenuTask async task to query for the types of problems to be troubleshoot
+         */
         MenuTask menuTask = new MenuTask(getContext());
         menuTask.execute(method, BOX_NUMBER_SESSION);
 
@@ -113,6 +102,9 @@ public class TroubleshootFragment extends Fragment {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
 
+        /**
+         * Function for search to filter list of troubleshooting problems
+         */
         EditText editText = (EditText) view.findViewById(R.id.search_text);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -164,21 +156,15 @@ public class TroubleshootFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Troubleshoot item);
     }
 
+    /**
+     * Query for the list of troubleshooting problems
+     * Post Execute calls MyTroubleshootRecyclerViewAdapter to display the data queried
+     */
     public class MenuTask extends AsyncTask<String,Void,String> {
         Context ctx;
         AlertDialog alertDialog;
@@ -196,8 +182,6 @@ public class TroubleshootFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             String troubleshoot_url = "https://uslsxpertech.000webhostapp.com/xpertech/troubleshoot.php";
-            String selfinstall_url = "https://uslsxpertech.000webhostapp.com/xpertech/selfinstall.php";
-            String usermanual_url = "https://uslsxpertech.000webhostapp.com/xpertech/usermanual.php";
             String method = params[0];
             if(method.equals("troubleshoot")){
                 String box_number = params[1];
@@ -232,72 +216,7 @@ public class TroubleshootFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-            else if(method.equals("selfinstall")){
-                String box_number = params[1];
-                try {
-                    URL url = new URL(selfinstall_url);
-                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                    httpURLConnection.setRequestMethod("POST");
-                    httpURLConnection.setDoOutput(true);
-                    httpURLConnection.setDoInput(true);
-                    OutputStream outputStream = httpURLConnection.getOutputStream();
-                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-                    String data = URLEncoder.encode("box_number","UTF-8")+"="+URLEncoder.encode(box_number,"UTF-8");
-                    bufferedWriter.write(data);
-                    bufferedWriter.flush();
-                    bufferedWriter.close();
-                    outputStream.close();
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
-                    String response = "";
-                    String line = "";
-                    while ((line = bufferedReader.readLine())!=null)
-                    {
-                        response += line;
-                    }
-                    bufferedReader.close();
-                    inputStream.close();
-                    httpURLConnection.disconnect();
-                    return response;
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            else if(method.equals("usermanual")){
-                String box_number = params[1];
-                try {
-                    URL url = new URL(usermanual_url);
-                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                    httpURLConnection.setRequestMethod("POST");
-                    httpURLConnection.setDoOutput(true);
-                    httpURLConnection.setDoInput(true);
-                    OutputStream outputStream = httpURLConnection.getOutputStream();
-                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-                    String data = URLEncoder.encode("box_number","UTF-8")+"="+URLEncoder.encode(box_number,"UTF-8");
-                    bufferedWriter.write(data);
-                    bufferedWriter.flush();
-                    bufferedWriter.close();
-                    outputStream.close();
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
-                    String response = "";
-                    String line = "";
-                    while ((line = bufferedReader.readLine())!=null)
-                    {
-                        response += line;
-                    }
-                    bufferedReader.close();
-                    inputStream.close();
-                    httpURLConnection.disconnect();
-                    return response;
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+
             return null;
         }
         @Override
@@ -319,13 +238,5 @@ public class TroubleshootFragment extends Fragment {
             mAdapter = new MyTroubleshootRecyclerViewAdapter(troubleshootList,mListener);
             recyclerView.setAdapter(mAdapter);
         }
-        /*Message msg = new Message();
-        Bundle bundle = new Bundle();
-        bundle.putStringArrayList("title_list", title_list);
-        msg.setData(bundle);
-        Handler handler = new Handler();
-        handler.sendMessage(msg);*/
-
-
     }
 }
