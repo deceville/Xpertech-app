@@ -19,6 +19,11 @@
         android:layout_height="50dp"
         android:text="See Remote Content"
         android:layout_weight=".01"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:id="@+id/btn_remote"/>
 
 </LinearLayout>

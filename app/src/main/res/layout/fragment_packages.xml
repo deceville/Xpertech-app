@@ -35,7 +35,7 @@
             android:layout_marginTop="@dimen/item_padding"
             android:background="@color/colorPrimary"
             android:textColor="@android:color/white"
-            android:text="LEARN MORE"/>
+            android:text="VIEW MORE"/>
 
     </LinearLayout>
 

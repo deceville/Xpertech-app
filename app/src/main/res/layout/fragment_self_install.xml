@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/item_padding"
     tools:context="com.company.xpertech.xpertech.Nav_Fragment.Self_Install_Fragment.SelfInstallFragment"
     android:id="@+id/content_install">
 

@@ -27,5 +27,10 @@
         android:paddingStart="@dimen/content_padding"
         android:paddingEnd="@dimen/content_padding"
         android:layout_margin="@dimen/content_padding"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:text="LET'S DO IT"/>
 </LinearLayout>
