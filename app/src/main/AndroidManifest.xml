@@ -35,11 +35,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
 
-        <!--<activity-->
-        <!--android:name=".MainActivity"-->
-        <!--android:label="@string/title_activity_main"-->
-        <!--android:theme="@style/AppTheme.NoActionBar" />-->
-
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />

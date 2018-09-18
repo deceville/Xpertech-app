@@ -67,15 +67,6 @@ public class PackagesRecyclerView extends RecyclerView.Adapter<PackagesRecyclerV
         });
     }
 
-    public String getPackage(int position){
-        switch(position) {
-            case 0:
-                return ("Crystal Package");
-            case 1:
-                return ("Diamond Package");
-        }
-        return "";
-    }
 
     @Override
     public int getItemCount() {

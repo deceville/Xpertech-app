@@ -28,6 +28,7 @@ public class Task extends AsyncTask<String, Void, String> {
             String type = params[1];
             String status = params[2];
             String ownership = params[3];
+            String stat_desc = params[4];
             try {
                 URL url = new URL(urls);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -39,6 +40,7 @@ public class Task extends AsyncTask<String, Void, String> {
                 String data = URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode(type, "UTF-8");
                 data += "&" + URLEncoder.encode("status", "UTF-8") + "=" + URLEncoder.encode(status, "UTF-8");
                 data += "&" + URLEncoder.encode("ownership", "UTF-8") + "=" + URLEncoder.encode(ownership, "UTF-8");
+                data += "&" + URLEncoder.encode("stat_desc", "UTF-8") + "=" + URLEncoder.encode(stat_desc, "UTF-8");
                 bufferedWriter.write(data);
                 bufferedWriter.flush();
                 bufferedWriter.close();

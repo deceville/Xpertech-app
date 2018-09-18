@@ -39,8 +39,6 @@ public class PackagesFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
-    ArrayList <String> packageTitle;
-    ArrayList <String> packageChannel;
     ArrayList<Packages> packagesList;
 
     static String BOX_NUMBER_SESSION;

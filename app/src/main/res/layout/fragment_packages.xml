@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="@dimen/content_padding"
-        android:background="@android:color/holo_blue_light">
+        android:background="@color/bgColor">
 
         <TextView
             android:id="@+id/package_title"

@@ -1,8 +1,6 @@
 package com.company.xpertech.xpertech.Nav_Fragment.Troubleshoot_Fragment;
 
-/**
- * Created by Skylar Gail on 8/18/2018.
- */
+
 
 public class Troubleshoot {
     private String instruct;

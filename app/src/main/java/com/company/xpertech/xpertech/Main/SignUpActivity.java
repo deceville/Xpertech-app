@@ -50,8 +50,6 @@ public class SignUpActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     String BOX_NUMBER_SESSION;
     String USER_SESSION;
-
-    boolean read = false;
     Intent intent;
 
     final int RequestCameraPermissionID = 1001;
@@ -66,6 +64,15 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Start the session
         sharedPref = getSharedPreferences("values", Context.MODE_PRIVATE);
+
+        // Static User
+        String result = "10011000000001";
+        USER_SESSION = result;
+        Log.d("SESSION", USER_SESSION);
+        BackgroundTask backgroundTask = new BackgroundTask(getApplicationContext());
+        backgroundTask.execute("login", result);
+
+
         qr_result = (TextView) findViewById(R.id.qr_result);
 
         cameraPreview = (SurfaceView) findViewById(R.id.cameraPreview);
@@ -163,11 +170,6 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
         protected String doInBackground(String... params) {
             String login_url = "http://uslsxpertech.000webhostapp.com/xpertech/login.php";
             String method = params[0];
@@ -228,14 +230,17 @@ public class SignUpActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.putExtra("keep", false);
+
+                Toast.makeText(getApplicationContext(), "You have successfully logged in.", Toast.LENGTH_SHORT).show();
+
                 startActivity(intent);
                 finish();
             } else {
                 // if the scanned qr code does not exist in the system, Task for statistics will be initiated and store the information that
                 // an un successful log in was performed
-                Toast.makeText(getApplicationContext(), "Sorry, device " + BOX_NUMBER_SESSION + " is not registered.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Sorry, device \"" + BOX_NUMBER_SESSION + "\" is not registered.", Toast.LENGTH_SHORT).show();
                 Task task = new Task();
-                task.execute("stat", "login", "fail", "0");
+                task.execute("stat", "login", "fail", "10001000000000", "Failed Login Attemp");
             }
         }
     }

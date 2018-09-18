@@ -106,6 +106,5 @@ public class MyTroubleshootRecyclerViewAdapter extends RecyclerView.Adapter<MyTr
     public void filterList(ArrayList<Troubleshoot> list){
         mValues = (List)list;
         notifyDataSetChanged();
-
     }
 }

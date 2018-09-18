@@ -3,10 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginStart="@dimen/content_padding"
-    android:layout_marginEnd="@dimen/content_padding"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
+    android:background="@color/bgColor"
+    android:paddingStart="@dimen/content_padding"
+    android:paddingEnd="@dimen/content_padding"
+    android:padding="@dimen/item_padding"
+    android:layout_margin="@dimen/item_padding"
     android:id="@+id/channel_layout"
     tools:context="com.company.xpertech.xpertech.Nav_Fragment.Channel_Packages_Fragment.ChannelFragment">
 

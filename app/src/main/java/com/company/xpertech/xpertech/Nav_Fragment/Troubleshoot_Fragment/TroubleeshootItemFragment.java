@@ -60,6 +60,8 @@ public class TroubleeshootItemFragment extends Fragment {
     String BOX_NUMBER_SESSION;
     String USER_SESSION;
 
+    Button btn_done;
+
     private OnFragmentInteractionListener mListener;
 
     public TroubleeshootItemFragment() {
@@ -120,6 +122,10 @@ public class TroubleeshootItemFragment extends Fragment {
             gif.setImageResource(imgInt);
         }
         txt.setText(troubleshoot.getInstruct());
+
+        if(cnt >= troubleshootArrayList.size()+1){
+            btn_done.setText("DONE");
+        }
     }
 
     @Override
@@ -134,7 +140,8 @@ public class TroubleeshootItemFragment extends Fragment {
          * Handles the done button on every step
          * once clicked, a dialog box will be displayed for confirmation
          */
-        Button btn_done = (Button) view.findViewById(R.id.btn_done);
+        btn_done = (Button) view.findViewById(R.id.btn_done);
+        btn_done.setText("Next");
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

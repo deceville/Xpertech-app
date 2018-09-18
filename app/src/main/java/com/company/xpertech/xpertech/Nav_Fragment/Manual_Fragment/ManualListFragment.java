@@ -41,9 +41,6 @@ public class ManualListFragment extends Fragment {
     private String mParam2;
     View view;
     Context ctx;
-    FragmentActivity ft;
-    ListView listView;
-    String items[];
 
     private OnFragmentInteractionListener mListener;
 

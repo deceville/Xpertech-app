@@ -1,6 +1,8 @@
 package com.company.xpertech.xpertech.Main;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -113,9 +116,17 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         /**
+         *  Shared preferences ask as the session for the whole application
+         *  USER_SESSION contains the user_id + device_id
+         */
+        s = getSharedPreferences("values", Context.MODE_PRIVATE);
+        USER_SESSION = s.getString("USER_SESSION", "USER_SESSION");
+        Log.d("USER", USER_SESSION);
+
+        /**
          *  Async task for extracting user information that is displayed on the hambuger menu
          */
-        MainActivity.BackgroundTask backgroundTask = new MainActivity.BackgroundTask(getApplicationContext());
+        MainActivity.BackgroundTask backgroundTask = new MainActivity.BackgroundTask(this);
         backgroundTask.execute("get");
 
         /**
@@ -125,19 +136,10 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         /**
-         *  Shared preferences ask as the session for the whole application
-         *  USER_SESSION contains the user_id + device_id
-         */
-        s = getSharedPreferences("values", Context.MODE_PRIVATE);
-        USER_SESSION = s.getString("USER_SESSION", "USER_SESSION");
-
-        Toast.makeText(getApplicationContext(), "You have successfully logged in.", Toast.LENGTH_SHORT);
-
-        /**
          *  Task method that stores the statistics information, in this call, user logged in successfully
          */
         Task task = new Task();
-        task.execute("stat", "login", "pass", USER_SESSION);
+        task.execute("stat", "login", "pass", USER_SESSION, "User Successfully Logged In");
 
         /**
          *  Setting the layout for the Home
@@ -271,16 +273,16 @@ public class MainActivity extends AppCompatActivity
      *  Async task function to extract user information from the database host
      */
     public class BackgroundTask extends AsyncTask<String, Void, String> {
-        AlertDialog alertDialog;
-        Context ctx;
-        public BackgroundTask(Context ctx) {
-            this.ctx = ctx;
+        private ProgressDialog dialog;
+
+        public BackgroundTask(Activity activity) {
+            dialog = new ProgressDialog(activity);
         }
 
         @Override
         protected void onPreExecute() {
-            alertDialog = new AlertDialog.Builder(ctx).create();
-            alertDialog.setTitle("Login Information....");
+            dialog.setMessage("Loading");
+            dialog.show();
         }
 
         /**
@@ -343,6 +345,10 @@ public class MainActivity extends AppCompatActivity
             contact = (TextView) drawer.findViewById(R.id.contactText);
             username.setText(global_name);
             contact.setText(global_contact);
+
+            if(dialog.isShowing()){
+                dialog.dismiss();
+            }
         }
     }
 
